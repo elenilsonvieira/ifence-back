@@ -1,17 +1,16 @@
 package br.edu.ifpb.dac.groupd.business.service;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+
+import br.edu.ifpb.dac.groupd.business.exception.*;
+import br.edu.ifpb.dac.groupd.model.entities.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.dac.groupd.business.exception.FenceEmptyException;
-import br.edu.ifpb.dac.groupd.business.exception.FenceNotFoundException;
-import br.edu.ifpb.dac.groupd.business.exception.NoBraceletAvailableException;
-import br.edu.ifpb.dac.groupd.business.exception.UserNotFoundException;
 import br.edu.ifpb.dac.groupd.business.service.converter.FenceConverterService;
 import br.edu.ifpb.dac.groupd.model.entities.Fence;
 import br.edu.ifpb.dac.groupd.model.entities.User;
@@ -29,9 +28,9 @@ public class FenceService {
 	
 	@Autowired
 	private FenceConverterService converter;
+
 	
-	
-	public Fence createFence(Long id, FenceRequest dto) throws UserNotFoundException {
+	public Fence createFence(Long id, FenceRequest dto) throws UserNotFoundException, FenceNameAlreadyInUseException {
 		Optional<User> register = userRepo.findById(id);
 		
 		if (register.isEmpty())
@@ -40,7 +39,19 @@ public class FenceService {
 		User user = register.get();
 		
 		Fence mapped = converter.requestToFence(dto);
-		
+		AtomicBoolean nameAlreadyInUse = new AtomicBoolean(false);
+		List<Fence> allFencesFromUser = fenceRepo.findAllFencesByUser(id);
+		allFencesFromUser.forEach(fence ->{
+
+			if(fence.getName().equals(mapped.getName())) {
+				nameAlreadyInUse.set(true);
+			}
+		});
+
+		if(nameAlreadyInUse.get()){
+			throw new FenceNameAlreadyInUseException();
+		}
+
 		Fence fence = fenceRepo.save(mapped);
 		user.addFence(fence);
 		
@@ -54,7 +65,6 @@ public class FenceService {
 		
 		if (register.isEmpty())
 			throw new UserNotFoundException(id);
-		
 		return fenceRepo.findAllFencesByUser(id, pageable);
 	}
 	public Page<Fence> searchFencesByName(Long id, String name, Pageable pageable) throws UserNotFoundException {
@@ -82,6 +92,25 @@ public class FenceService {
 		
 		return registerFence.get();
 	}
+
+	public boolean updateCoordinates(Long userId, Long fenceId, Coordinate newCoordinate) throws UserNotFoundException {
+		Optional<User> userOptional = userRepo.findById(userId);
+		if(userOptional.isEmpty())
+			throw new UserNotFoundException(userId);
+		User user = userOptional.get();
+
+		Iterator<Fence> it = user.getFences().iterator();
+		while(it.hasNext()){
+			Fence f = (Fence)it.next();
+			if(f.getId().equals(fenceId)){
+				f.setCoordinate(newCoordinate);
+			}
+		}
+		System.out.println("Coordenada atualizada");
+		userRepo.save(user);
+		return true;
+	}
+
 
 	public Fence updateFence(Long id, Long fenceId, FenceRequest dto) throws UserNotFoundException, FenceNotFoundException {
 		Optional<User> register = userRepo.findById(id);
@@ -145,5 +174,6 @@ public class FenceService {
 		userRepo.save(user);
 		fenceRepo.deleteById(fenceId);
 	}
-	
+
+
 }

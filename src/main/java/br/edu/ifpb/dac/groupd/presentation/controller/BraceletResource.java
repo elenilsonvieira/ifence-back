@@ -5,6 +5,8 @@ import java.security.Principal;
 
 import javax.validation.Valid;
 
+import br.edu.ifpb.dac.groupd.business.exception.BraceletNameAlreadyInUseException;
+import br.edu.ifpb.dac.groupd.business.exception.BraceletRegisteredInFenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +46,7 @@ public class BraceletResource {
 			Principal principal,
 			@Valid
 			@RequestBody
-			BraceletRequest postDto) throws UserNotFoundException{
+			BraceletRequest postDto) throws UserNotFoundException, BraceletNameAlreadyInUseException {
 		Bracelet bracelet = braceletService.createBracelet(getPrincipalId(principal), postDto);
 		
 		BraceletResponse dto = converter.braceletToResponse(bracelet);
@@ -102,7 +104,7 @@ public class BraceletResource {
 	@DeleteMapping("/{braceletId}")
 	public ResponseEntity<?> deleteUserBracelet(
 			Principal principal,
-			@PathVariable("braceletId") Long braceletId) throws UserNotFoundException, BraceletNotFoundException{
+			@PathVariable("braceletId") Long braceletId) throws UserNotFoundException, BraceletNotFoundException, BraceletRegisteredInFenceException {
 		braceletService.deleteBracelet(getPrincipalId(principal), braceletId);
 		
 		return ResponseEntity.noContent().build();

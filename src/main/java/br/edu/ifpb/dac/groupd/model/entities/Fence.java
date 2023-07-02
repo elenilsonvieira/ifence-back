@@ -49,6 +49,8 @@ public class Fence implements Serializable, Timer{
 	@Embedded
 	@Valid
 	private Coordinate coordinate;
+
+	//private boolean fenceMovable = false;
 	
 	@Column(name="start_time")
 	private LocalTime startTime;
@@ -172,6 +174,7 @@ public class Fence implements Serializable, Timer{
 			bracelet.getFences().add(this);
 		}
 	}
+
 	
 	public void removeBracelet(Bracelet bracelet) {
 		this.bracelets.remove(bracelet);
