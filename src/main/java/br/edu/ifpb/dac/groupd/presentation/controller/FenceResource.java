@@ -74,6 +74,16 @@ public class FenceResource {
 											   @PathVariable("fenceId") Long fenceId ) throws UserNotFoundException {
 		return ResponseEntity.ok().body(fenceService.updateCoordinates(userId,fenceId, newCoordinate));
 	}
+
+	@PutMapping("/{fenceId}/coordinates")
+	public ResponseEntity<?> updateCoordinates(
+			Principal principal,
+			@PathVariable("fenceId") Long fenceId,
+			@RequestBody Coordinate newCoordinate) throws UserNotFoundException {
+		return ResponseEntity.ok().body(
+				fenceService.updateCoordinates(getPrincipalId(principal), fenceId, newCoordinate)
+		);
+	}
 	
 	@GetMapping("/{fenceId}")
 	public ResponseEntity<?> getAllFences(

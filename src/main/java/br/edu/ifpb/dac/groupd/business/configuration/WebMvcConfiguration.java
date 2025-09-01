@@ -10,15 +10,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("api", HandlerTypePredicate.forAnnotation(RestController.class));
-    }
+	public void configurePathMatch(PathMatchConfigurer configurer) {
+		// Adicionar "/api" apenas para nossos controllers, não para controllers de libs (ex.: springdoc)
+		configurer.addPathPrefix(
+			"api",
+			HandlerTypePredicate.forBasePackage("br.edu.ifpb.dac.groupd")
+				.and(HandlerTypePredicate.forAnnotation(RestController.class))
+		);
+	}
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
-			.allowedOrigins("http://localhost:3000")
+			// Em dev, liberar padrões para Expo Web e LAN. Para prod, restringir domínios.
+			.allowedOriginPatterns("*")
 			.allowedHeaders("*")
-			.allowedMethods("*");
+			.allowedMethods("*")
+			.allowCredentials(true);
 	}
 }

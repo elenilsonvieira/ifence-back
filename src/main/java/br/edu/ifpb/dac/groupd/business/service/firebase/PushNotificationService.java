@@ -1,6 +1,4 @@
 package br.edu.ifpb.dac.groupd.business.service.firebase;
-
-import br.edu.ifpb.dac.groupd.presentation.controller.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

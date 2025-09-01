@@ -33,3 +33,6 @@ firebase-config/
 
 # Build folder
 target/
+
+# H2 data directory
+data/

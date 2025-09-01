@@ -173,13 +173,16 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepo.findAll();
 	}
 	
 	public List<User> find(User filter) {
-		// TODO Auto-generated method stub
-		return null;
+		if (filter == null) return userRepo.findAll();
+		// busca simples por email exato se informado; pode ser expandida conforme necessidade
+		if (filter.getEmail() != null) {
+			return userRepo.findByEmail(filter.getEmail()).map(List::of).orElseGet(List::of);
+		}
+		return userRepo.findAll();
 	}
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

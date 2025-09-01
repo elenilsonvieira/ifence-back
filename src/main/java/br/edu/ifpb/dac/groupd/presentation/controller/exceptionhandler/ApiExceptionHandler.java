@@ -179,11 +179,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return new String[] {property,entity};
 	}
 	
+	@SuppressWarnings("unused")
 	private String getProperty(String message) {
 		String[] splitted = splitMessage(message);
 		
 		return splitted[1].split(" ")[1];
 	}
+	@SuppressWarnings("unused")
 	private String getEntity(String message) {
 		String[] splitted = splitMessage(message);
 		

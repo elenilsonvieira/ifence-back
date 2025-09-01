@@ -15,19 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.dac.groupd.business.exception.AlarmNotFoundException;
-import br.edu.ifpb.dac.groupd.business.service.firebase.PushNotificationService;
 import br.edu.ifpb.dac.groupd.model.entities.Alarm;
-import br.edu.ifpb.dac.groupd.model.entities.DeviceToken;
 import br.edu.ifpb.dac.groupd.model.entities.Fence;
 import br.edu.ifpb.dac.groupd.model.entities.Location;
 import br.edu.ifpb.dac.groupd.model.repository.AlarmRepository;
-import br.edu.ifpb.dac.groupd.presentation.dto.firebase.PushNotificationRequest;
 
 @Service
 public class AlarmService {
 
-	@Autowired
-	private PushNotificationService pushNotificationService;
+	// Push notifications desativadas no momento
 
 	@Autowired
 	private AlarmRepository alarmRepository;
@@ -137,7 +133,6 @@ public class AlarmService {
 	private void notifyUser(Location location) {
 		String emailUser = location.getBracelet().getUser().getEmail();
 		EmailDto emailDto = new EmailDto();
-		String bracelet = location.getBracelet().getName();
 		String title = String.format("Alarme de Pulseira disparado");
 		emailDto.setSubject(title);
 		String message = String.format("A pulseira de %s saiu da cerca %s",

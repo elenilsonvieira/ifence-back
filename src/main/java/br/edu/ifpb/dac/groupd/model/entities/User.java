@@ -3,7 +3,6 @@ package br.edu.ifpb.dac.groupd.model.entities;
 import static br.edu.ifpb.dac.groupd.business.validation.validator.ModelValidator.validBracelet;
 import static br.edu.ifpb.dac.groupd.business.validation.validator.ModelValidator.validFence;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,12 +31,11 @@ import br.edu.ifpb.dac.groupd.business.validation.constraints.ValidEmail;
 @Entity
 @Table(name="users")
 @Validated
-public class User implements Serializable, UserDetails {
+public class User implements UserDetails {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6820520515993917458L;
 	
 	
 	@Id

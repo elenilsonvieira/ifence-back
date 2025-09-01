@@ -1,4 +1,27 @@
 # ifence-back
+## Quick Start (H2 - Dev - persistente)
+
+Executa com H2 em arquivo (dados persistem entre reinícios), sem precisar do PostgreSQL:
+
+```powershell
+cd ifence-back
+$env:SPRING_PROFILES_ACTIVE = "h2"
+./mvnw.cmd -DskipTests spring-boot:run
+```
+
+- Swagger: http://localhost:8080/swagger-ui/index.html
+- H2 Console: http://localhost:8080/h2-console 
+	- JDBC URL: `jdbc:h2:file:./data/ifence`
+	- User: `sa` (sem senha)
+	- Observação: os arquivos do banco serão criados em `ifence-back/data/`
+- Usuário seed para login (criado automaticamente no profile `h2`):
+	- Email: `admin@ifence.local`
+	- Senha: `123456`
+
+No app mobile, ajuste `app.json` (`extra.IFENCE_API_URL`) para o host correto:
+- Emulador Android: `http://10.0.2.2:8080/api`
+- Dispositivo físico: `http://SEU_IP_LOCAL:8080/api`
+
 
 ### Dependências:
 

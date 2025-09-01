@@ -7,11 +7,12 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+// import org.springframework.test.context.ContextConfiguration; // removido: não usado
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.PostgreSQLContainer;
+import javax.annotation.PreDestroy;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -20,12 +21,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 // @ContextConfiguration(initializers = {AbstractInfrastructure.Initializer.class})
 @Testcontainers(disabledWithoutDocker = true)
+@SuppressWarnings("resource")
 public class AbstractInfrastructure {
 	
     @Container
     public static PostgreSQLContainer<?> postgresDb;
     
-    static {
+	static {
     	init();
     }
     private static void init() {
@@ -42,8 +44,11 @@ public class AbstractInfrastructure {
     	postgresDb.start();
     }
     
-    private static void finish() {
-    	postgresDb.close();
+    @PreDestroy
+    public void finish() {
+    	if (postgresDb != null) {
+    		postgresDb.close();
+    	}
     }
    
 	@DynamicPropertySource

@@ -74,25 +74,6 @@ public class AlarmResource {
 		return ResponseEntity.ok().body(allAllarmsResponsesMin);
 	}
 
-	private AlarmResponseMin addUniqueAlarmsResponses(AlarmResponseMin a,
-															List<AlarmResponseMin> listAlarms){
-		int cont = 0;
-		for (AlarmResponseMin alarm: listAlarms) {
-			if(a.getId().equals(alarm.getId())){
-				cont++;
-			}
-		}
-		if (cont==1){
-			System.out.println("add é true");
-			return a;
-
-		}
-		else{
-			System.out.println("tamanho "+ cont);
-			return null;
-		}
-	}
-
 	private AlarmResponseMin alarmToAlarmResponseMin(Alarm a, AlarmResponseMin alarmResponseMin){
 		alarmResponseMin.setDistance(a.getDistance());
 		alarmResponseMin.setBraceletName(a.getLocation().getBracelet().getName());

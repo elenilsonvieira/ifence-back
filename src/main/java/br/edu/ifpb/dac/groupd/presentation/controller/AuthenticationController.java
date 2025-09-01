@@ -31,7 +31,7 @@ import br.edu.ifpb.dac.groupd.presentation.dto.security.TokenValidResponse;
 import br.edu.ifpb.dac.groupd.presentation.dto.security.UserDetailsRequest;
 
 @RestController
-@RequestMapping
+@RequestMapping({"", "/api"})
 @Scope(value=WebApplicationContext.SCOPE_SESSION)
 public class AuthenticationController {
 	@Autowired

@@ -30,8 +30,6 @@ public class BraceletService {
 	@Autowired
 	private BraceletConverterService converter;
 	@Autowired
-	private FenceService fenceService;
-	@Autowired
 	private FenceRepository fenceRepository;
 	
 	// User bracelet

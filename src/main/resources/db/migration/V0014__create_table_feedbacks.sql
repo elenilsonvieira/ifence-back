@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS feedbacks (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    contact VARCHAR(255),
+    message VARCHAR(1000) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL
+);

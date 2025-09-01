@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -112,7 +111,7 @@ public class FenceServiceTests {
         FenceResponse fenceDto = converter.fenceToResponse(fence);
         fenceDto.setName("Izabel V.");
         
-        ResponseEntity response = controller.updateFence(principal, fence.getId(), fenceRequest);
+    ResponseEntity<?> response = controller.updateFence(principal, fence.getId(), fenceRequest);
 
         assertEquals(200, response.getStatusCodeValue());
 

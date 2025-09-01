@@ -1,0 +1,1 @@
+ALTER TABLE feedbacks ADD COLUMN IF NOT EXISTS message_category VARCHAR(255);

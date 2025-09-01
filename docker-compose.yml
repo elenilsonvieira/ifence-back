@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:14
+    container_name: ifence-postgres
+    environment:
+      POSTGRES_DB: ifence
+      POSTGRES_USER: dev_ifence
+      POSTGRES_PASSWORD: dev_ifence123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_ifence -d ifence"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  pgdata:

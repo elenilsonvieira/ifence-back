@@ -59,7 +59,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web
 			.ignoring()
-			.antMatchers("/resources/**");
+			.antMatchers(
+				"/resources/**",
+				"/v2/api-docs",
+				"/v3/api-docs",
+				"/v3/api-docs/**",
+				"/swagger-resources/**",
+				"/swagger-ui/**",
+				"/swagger-ui.html",
+				"/webjars/**"
+			);
 	}
 	
 	@Bean
@@ -78,18 +87,41 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(new HttpStatusEntryPoint(UNAUTHORIZED))
 			.and()
 				.authorizeRequests()
+					// Swagger / OpenAPI e H2 liberados (dev)
+					.antMatchers(
+						"/v2/api-docs",
+						"/v3/api-docs",
+						"/v3/api-docs/**",
+						"/swagger-ui.html",
+						"/swagger-ui/**",
+						"/swagger-resources/**",
+						"/webjars/**",
+						"/h2-console/**"
+					).permitAll()
 					.antMatchers(GET, "/actuator").permitAll()
-					.antMatchers(POST, "/api/signin", "/api/users", "/api/login", "/api/isValidToken").permitAll()
-					.antMatchers("/api/users/**",
-						"/api/bracelets","/api/bracelets/**", 
-						"/api/fences","/api/fences/**", 
-						"/api/locations", "/api/locations/**", 
-						"/api/alarms/**" ).authenticated()
+					// Endpoints públicos (com e sem prefixo /api)
+					.antMatchers(POST, 
+						"/api/signin", "/signin",
+						"/api/users", "/users",
+						"/api/login", "/login",
+						"/api/isValidToken", "/isValidToken"
+					).permitAll()
+					// Demais recursos autenticados (com e sem prefixo /api)
+					.antMatchers(
+						"/api/users/**", "/users/**",
+						"/api/bracelets", "/api/bracelets/**", "/bracelets", "/bracelets/**",
+						"/api/fences", "/api/fences/**", "/fences", "/fences/**",
+						"/api/locations", "/api/locations/**", "/locations", "/locations/**",
+						"/api/alarms/**", "/alarms/**"
+					).authenticated()
 					.antMatchers(DELETE, "/api/users").hasRole(ADMIN.toString())
 					.anyRequest().authenticated()
 			.and()
 				.sessionManagement()
 					.sessionCreationPolicy(STATELESS)
+				.and()
+				.headers()
+					.frameOptions().sameOrigin()
 				.and()
 				.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)
 				.logout(

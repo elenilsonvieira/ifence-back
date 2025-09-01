@@ -30,7 +30,7 @@ import br.edu.ifpb.dac.groupd.presentation.dto.UserRequest;
 import br.edu.ifpb.dac.groupd.presentation.dto.UserResponse;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping({"/users", "/api/users"})
 public class UserResource {
 	@Autowired
 	private UserServiceImpl userService;

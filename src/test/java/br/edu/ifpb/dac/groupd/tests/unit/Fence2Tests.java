@@ -3,7 +3,6 @@ package br.edu.ifpb.dac.groupd.tests.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalTime;
@@ -11,12 +10,10 @@ import java.time.LocalTime;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 
 import br.edu.ifpb.dac.groupd.business.exception.FenceEmptyException;
 import br.edu.ifpb.dac.groupd.business.exception.NoBraceletAvailableException;
-import br.edu.ifpb.dac.groupd.business.service.FenceService;
 import br.edu.ifpb.dac.groupd.model.entities.Coordinate;
 import br.edu.ifpb.dac.groupd.model.entities.Fence;
 
@@ -63,8 +60,8 @@ public class Fence2Tests {
 
         // Testar o nome da cerca com apenas letras
 
-        fence.setName("Izabel"); 
-        assertEquals(validationNameHaveNumbers("Izabel"), fence.getName().equals(true));
+    fence.setName("Izabel"); 
+    assertEquals(validationNameHaveNumbers("Izabel"), false);
 
         // Testar se a cerca está ativa
         try {
